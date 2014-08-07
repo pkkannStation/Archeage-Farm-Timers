@@ -1,15 +1,18 @@
-
 package abstracts;
+
+import java.io.Serializable;
 
 /**
  *
  * @author Patrick
  */
-public abstract class Plantable {
+public abstract class Plantable implements Serializable {
 
     private String name;
     private long growthTime;
     private String climate;
+    private float climateBonus;
+    private boolean inClimate;
 
     public Plantable(String name, long growthTime, String climate) {
         this.name = name;
@@ -40,6 +43,26 @@ public abstract class Plantable {
     public void setClimate(String climate) {
         this.climate = climate;
     }
+
+    public float getClimateBonus() {
+        return climateBonus;
+    }
+
+    public void setClimateBonus(float climateBonus) {
+        this.climateBonus = climateBonus;
+    }
+
+    public boolean isInClimate() {
+        return inClimate;
+    }
+
+    public void setInClimate(boolean inClimate) {
+        this.inClimate = inClimate;
+    }
     
-    
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }

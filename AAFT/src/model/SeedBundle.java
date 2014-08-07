@@ -7,9 +7,9 @@ import abstracts.Plantable;
  *
  * @author Patrick
  */
-public class Sapling extends Plantable {
+public class SeedBundle extends Plantable {
 
-    public Sapling(String name, long growthTime, String climate) {
+    public SeedBundle(String name, long growthTime, String climate) {
         super(name, growthTime, climate);
         setClimateBonus(0.8f);
     }
