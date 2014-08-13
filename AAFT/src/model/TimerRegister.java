@@ -28,6 +28,7 @@ public class TimerRegister extends Register<Timer> {
         makeTableModel();
         String[] row = {name, remainingTime, state};
         dtm.addRow(row);
+        
         dtm.fireTableDataChanged();
     }
     

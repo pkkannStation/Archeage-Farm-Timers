@@ -1,12 +1,14 @@
 #ant specific
-dbs/dist/
-dbs/build/
+AAFT/dist/
+AAFT/build/
+AAFT/data/
+
  
 #netbeans specific
-dbs/core
-dbs/nbproject/*
-!dbs/nbproject/project.properties
-!dbs/nbproject/project.xml
+AAFT/core
+AAFT/nbproject/*
+!AAFT/nbproject/project.properties
+!AAFT/nbproject/project.xml
  
 #java specific
 *.class
