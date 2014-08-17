@@ -2,6 +2,8 @@ package control;
 
 import java.util.HashMap;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import model.FavoritRegister;
 import model.LivestockRegister;
 import model.SaplingRegister;
@@ -18,12 +20,14 @@ public class ViewController {
 
     public static final int CREATETIMERVIEW = 1;
     public static final int NEWPLANTABLEVIEW = 2;
+    public static final int DELETETIMERSVIEW = 3;
 
-    private final HashMap<Integer, JDialog> viewMap;
+    private final HashMap<Integer, WindowConstants> viewMap;
 
     private MainView mainView;
     private CreateTimerView createTimerView;
     private NewPlantableView newPlantableView;
+    private DeleteTimersView deleteTimersView;
     
     private TimerRegister timerRegister;
     private SeedRegister seedRegister;
@@ -50,9 +54,11 @@ public class ViewController {
     private void initViews() {
         createTimerView = new CreateTimerView(mainView, true, this, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, timerRegister, favoritRegister);
         newPlantableView = new NewPlantableView(mainView, true, this, seedRegister, seedBundleRegister, saplingRegister, livestockRegister);
-
+        deleteTimersView = new DeleteTimersView(mainView, true, this, timerRegister);
+        
         viewMap.put(CREATETIMERVIEW, createTimerView);
         viewMap.put(NEWPLANTABLEVIEW, newPlantableView);
+        viewMap.put(DELETETIMERSVIEW, deleteTimersView);
     }
 
     private void constructFrame() {
@@ -61,7 +67,6 @@ public class ViewController {
                 mainView = new MainView(ViewController.this, timerRegister, favoritRegister, fileHandler);
             }
         });
-        
     }
     
     public void setFrameVisible(boolean visible) {
@@ -76,6 +81,10 @@ public class ViewController {
     public JDialog getView(int id) {
         JDialog d = (JDialog) viewMap.get(id);
         return d;
+    }
+    
+    public JFrame getMainView() {
+        return mainView;
     }
 
     private void initLookAndFeel() {

@@ -3,6 +3,7 @@ package model;
 
 import abstracts.Plantable;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -11,9 +12,11 @@ import java.io.Serializable;
 public class Timer implements Serializable {
     
     private Plantable plantable;
+    private Date plantTime;
 
     public Timer(Plantable plantable) {
         this.plantable = plantable;
+        this.plantTime = new Date();
     }
 
     public Plantable getPlantable() {
@@ -23,7 +26,18 @@ public class Timer implements Serializable {
     public void setPlantable(Plantable plantable) {
         this.plantable = plantable;
     }
-    
-    
 
+    public Date getPlantTime() {
+        return plantTime;
+    }
+
+    public void setPlantTime(Date plantTime) {
+        this.plantTime = plantTime;
+    }
+    
+    @Override
+    public String toString() {
+        return plantable.toString();
+    }
+    
 }

@@ -1,10 +1,14 @@
 package aaft;
 
+import abstracts.Plantable;
+import control.AutomaticTableUpdater;
 import control.FileHandler;
 import control.ViewController;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import model.*;
 
@@ -29,6 +33,8 @@ public class AAFT {
     private final FileHandler fileHandler;
     private final ViewController viewController;
     
+    private final AutomaticTableUpdater automaticTableUpdater;
+    
 
     public AAFT() throws IOException, ClassNotFoundException {
         makeIcon();
@@ -48,6 +54,9 @@ public class AAFT {
         timerRegister.makeTableModel();
         favoritRegister.makeTableModel();
         viewController = new ViewController(timerRegister, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, favoritRegister, fileHandler);
+        
+        automaticTableUpdater = new AutomaticTableUpdater(timerRegister, viewController);
+        automaticTableUpdater.start();
     }
     
     private void makeIcon() throws IOException {

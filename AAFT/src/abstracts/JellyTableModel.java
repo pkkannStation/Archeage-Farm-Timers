@@ -12,7 +12,7 @@ import javax.swing.table.AbstractTableModel;
 public abstract class JellyTableModel<DATATYPE> extends AbstractTableModel {
     
     private final String[] columns;
-    private final ArrayList<Object[]> rows;
+    private ArrayList<Object[]> rows;
     private final ArrayList<DATATYPE> rowObjects;
     
     public JellyTableModel(ArrayList<DATATYPE> rowObjects) {
@@ -51,6 +51,14 @@ public abstract class JellyTableModel<DATATYPE> extends AbstractTableModel {
     public void removeRow(DATATYPE object) {
         rows.remove(rowObjects.indexOf(object));
         rowObjects.remove(object);
+        fireTableDataChanged();
+    }
+    
+    public void Refresh() {
+        rows = new ArrayList<>();
+        for(DATATYPE d : rowObjects) {
+            addRow(d);
+        }
         fireTableDataChanged();
     }
     

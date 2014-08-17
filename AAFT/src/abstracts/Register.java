@@ -65,6 +65,12 @@ public abstract class Register<DATATYPE> {
             jtm.updateRow(target, source);
         }
     }
+    
+    public void refreshTableModel() {
+        if(jtm != null) {
+            jtm.Refresh();
+        }
+    }
 
     /**
      * Returns the table model

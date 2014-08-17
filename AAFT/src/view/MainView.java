@@ -57,12 +57,14 @@ public class MainView extends javax.swing.JFrame {
         mainPane = new javax.swing.JPanel();
         timersScrollPane = new javax.swing.JScrollPane();
         timersTable = new javax.swing.JTable();
-        removeSelectedTimersButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         favoritsList = new javax.swing.JList();
+        jLabel1 = new javax.swing.JLabel();
         createTimersFromFavoritsButton = new javax.swing.JButton();
         deleteFavoritsButton = new javax.swing.JButton();
+        deleteDonesButton = new javax.swing.JButton();
+        deleteTimersButton = new javax.swing.JButton();
         toolBar = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         doShitButton = new javax.swing.JButton();
@@ -70,7 +72,7 @@ public class MainView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(aaft.AAFT.title);
         setIconImage(aaft.AAFT.icon);
-        setMinimumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(1024, 768));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -92,19 +94,10 @@ public class MainView extends javax.swing.JFrame {
                 "Name", "Time remaining", "State"
             }
         ));
+        timersTable.setEnabled(false);
         timersScrollPane.setViewportView(timersTable);
 
-        removeSelectedTimersButton.setBackground(new java.awt.Color(153, 153, 153));
-        removeSelectedTimersButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        removeSelectedTimersButton.setText("Remove selected");
-        removeSelectedTimersButton.setFocusable(false);
-        removeSelectedTimersButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        removeSelectedTimersButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        removeSelectedTimersButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeSelectedTimersButtonActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         favoritsList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         favoritsList.setModel(new javax.swing.AbstractListModel() {
@@ -114,19 +107,29 @@ public class MainView extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(favoritsList);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Favorits");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -149,6 +152,24 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        deleteDonesButton.setBackground(new java.awt.Color(153, 153, 153));
+        deleteDonesButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        deleteDonesButton.setText("Delete dones");
+        deleteDonesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDonesButtonActionPerformed(evt);
+            }
+        });
+
+        deleteTimersButton.setBackground(new java.awt.Color(153, 153, 153));
+        deleteTimersButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        deleteTimersButton.setText("Delete timers");
+        deleteTimersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteTimersButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPaneLayout = new javax.swing.GroupLayout(mainPane);
         mainPane.setLayout(mainPaneLayout);
         mainPaneLayout.setHorizontalGroup(
@@ -157,12 +178,14 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPaneLayout.createSequentialGroup()
-                        .addComponent(removeSelectedTimersButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(createTimersFromFavoritsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteFavoritsButton)
-                        .addGap(0, 15, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteDonesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteTimersButton)
+                        .addGap(0, 144, Short.MAX_VALUE))
                     .addComponent(timersScrollPane))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,15 +195,15 @@ public class MainView extends javax.swing.JFrame {
             mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(removeSelectedTimersButton)
-                    .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(createTimersFromFavoritsButton)
-                        .addComponent(deleteFavoritsButton)))
+                .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createTimersFromFavoritsButton)
+                    .addComponent(deleteFavoritsButton)
+                    .addComponent(deleteDonesButton)
+                    .addComponent(deleteTimersButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(timersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
+                    .addComponent(timersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -235,35 +258,6 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void removeSelectedTimersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSelectedTimersButtonActionPerformed
-        int[] selected = timersTable.getSelectedRows();
-        if (selected.length != 0) {
-            int n = JOptionPane.showConfirmDialog(this,
-                    "Sure you want to delete selected timers?",
-                    "Delete?",
-                    JOptionPane.YES_NO_OPTION);
-            if (n == 0) {
-
-                //System.out.println(selected.length);
-                ArrayList<Timer> timers = new ArrayList<>();
-
-                for (int i : selected) {
-                    Timer t = timerRegister.get(i);
-                    timers.add(t);
-                }
-
-                for (Timer t : timers) {
-                    timerRegister.delete(t);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Please choose something!",
-                    "Choose!",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_removeSelectedTimersButtonActionPerformed
-
     private void createTimersFromFavoritsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTimersFromFavoritsButtonActionPerformed
         List<Favorit> favorits = favoritsList.getSelectedValuesList();
 
@@ -300,16 +294,37 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteFavoritsButtonActionPerformed
 
+    private void deleteDonesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDonesButtonActionPerformed
+        ArrayList<Timer> timers = timerRegister.getObjects();
+        ArrayList<Timer> doneTimers = new ArrayList<>();
+        
+        for(Timer t : timers) {
+            if(timerRegister.getRemainingTime(t) == "Done") {
+                doneTimers.add(t);
+            }
+        }
+        
+        for(Timer t : doneTimers) {
+            timerRegister.delete(t);
+        }
+    }//GEN-LAST:event_deleteDonesButtonActionPerformed
+
+    private void deleteTimersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteTimersButtonActionPerformed
+        viewController.setViewVisible(ViewController.DELETETIMERSVIEW, true);
+    }//GEN-LAST:event_deleteTimersButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createTimersFromFavoritsButton;
+    private javax.swing.JButton deleteDonesButton;
     private javax.swing.JButton deleteFavoritsButton;
+    private javax.swing.JButton deleteTimersButton;
     private javax.swing.JButton doShitButton;
     private javax.swing.JList favoritsList;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPane;
-    private javax.swing.JButton removeSelectedTimersButton;
     private javax.swing.JScrollPane timersScrollPane;
     private javax.swing.JTable timersTable;
     private javax.swing.JToolBar toolBar;
