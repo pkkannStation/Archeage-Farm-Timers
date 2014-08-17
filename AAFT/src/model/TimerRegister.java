@@ -1,9 +1,8 @@
 package model;
 
+import abstracts.JellyTableModel;
 import abstracts.Plantable;
 import abstracts.Register;
-import java.util.Iterator;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -11,49 +10,28 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TimerRegister extends Register<Timer> {
 
-    private DefaultTableModel dtm;
-
     public void create(Plantable plantable) {
         Timer t = new Timer(plantable);
         insert(t);
-        addRowToModel(t.getPlantable().getName(), "", "");
     }
 
-    public DefaultTableModel getTableModel() {
-        makeTableModel();
-        return dtm;
-    }
+    @Override
+    public JellyTableModel<Timer> constructTableModel() {
+        JellyTableModel<Timer> jtm = new JellyTableModel<Timer>(this.getObjects()) {
 
-    public void addRowToModel(String name, String remainingTime, String state) {
-        makeTableModel();
-        String[] row = {name, remainingTime, state};
-        dtm.addRow(row);
-        
-        dtm.fireTableDataChanged();
+            @Override
+            public Object[] constructRow(Timer d) {
+                Object[] o = {d.getPlantable().getName(), "", ""};
+                return o;
+            }
+
+            @Override
+            public String[] constructColumns() {
+                String[] s = {"Name", "Remaining time", "State"};
+                return s;
+            }
+        };
+        return jtm;
     }
     
-    public void refreshModel() {
-        dtm.fireTableDataChanged();
-    }
-
-    private void makeTableModel() {
-        if (dtm == null) {
-            dtm = new DefaultTableModel() {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-
-            };
-            String[] columns = {"Name", "Remaining time", "State"};
-            dtm.setColumnIdentifiers(columns);
-
-            Iterator<Timer> timers = getObjects().iterator();
-            while (timers.hasNext()) {
-                Timer t = timers.next();
-                String[] row = {t.getPlantable().getName(), "", ""};
-                dtm.addRow(row);
-            }
-        }
-    }
 }

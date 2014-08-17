@@ -25,11 +25,12 @@ public class CreateTimerView extends javax.swing.JDialog {
     private SaplingRegister saplingRegister;
     private LivestockRegister livestockRegister;
     private TimerRegister timerRegister;
+    private FavoritRegister favoritRegister;
 
     /**
      * Creates new form CreateTimerView
      */
-    public CreateTimerView(java.awt.Frame parent, boolean modal, ViewController viewController, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, TimerRegister timerRegister) {
+    public CreateTimerView(java.awt.Frame parent, boolean modal, ViewController viewController, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, TimerRegister timerRegister, FavoritRegister favoritRegister) {
         super(parent, modal);
         initComponents();
         this.viewController = viewController;
@@ -38,6 +39,7 @@ public class CreateTimerView extends javax.swing.JDialog {
         this.saplingRegister = saplingRegister;
         this.livestockRegister = livestockRegister;
         this.timerRegister = timerRegister;
+        this.favoritRegister = favoritRegister;
 
         seedList.setModel(seedRegister.getListModel());
         seedbundleList.setModel(seedBundleRegister.getListModel());
@@ -77,7 +79,7 @@ public class CreateTimerView extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         newButton = new javax.swing.JButton();
         deleteSelectedButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        addToFavoritButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -237,8 +239,13 @@ public class CreateTimerView extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Add selected to favorites");
+        addToFavoritButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        addToFavoritButton.setText("Add selected to favorites");
+        addToFavoritButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToFavoritButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout toolPaneLayout = new javax.swing.GroupLayout(toolPane);
         toolPane.setLayout(toolPaneLayout);
@@ -252,7 +259,7 @@ public class CreateTimerView extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteSelectedButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(addToFavoritButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cancelButton)
                 .addContainerGap())
@@ -266,7 +273,7 @@ public class CreateTimerView extends javax.swing.JDialog {
                     .addComponent(cancelButton)
                     .addComponent(newButton)
                     .addComponent(deleteSelectedButton)
-                    .addComponent(jButton1))
+                    .addComponent(addToFavoritButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -302,107 +309,218 @@ public class CreateTimerView extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void deleteSelectedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedButtonActionPerformed
-        int n = JOptionPane.showConfirmDialog(this,
-                "Sure you want to delete selected plantables?\nTimers associated with it, will also be deleted!",
-                "Delete?",
-                JOptionPane.YES_NO_OPTION);
+        List<Seed> seeds = seedList.getSelectedValuesList();
+        List<SeedBundle> seedBundles = seedbundleList.getSelectedValuesList();
+        List<Sapling> saplings = saplingList.getSelectedValuesList();
+        List<Livestock> livestocks = livestockList.getSelectedValuesList();
 
-        if (n == 0) {
-            Iterator<Seed> seeds = seedList.getSelectedValuesList().iterator();
-            Iterator<SeedBundle> seedBundles = seedbundleList.getSelectedValuesList().iterator();
-            Iterator<Sapling> saplings = saplingList.getSelectedValuesList().iterator();
-            Iterator<Livestock> livestocks = livestockList.getSelectedValuesList().iterator();
-            
+        if (!seeds.isEmpty() || !seedBundles.isEmpty() || !saplings.isEmpty() || !livestocks.isEmpty()) {
 
-            while (seeds.hasNext()) {
-                Seed s = seeds.next();
-                Iterator<Timer> timers = timerRegister.getObjects().iterator();
-                while(timers.hasNext()) {
-                    Timer t = timers.next();
-                    if(t.getPlantable().equals(s)) {
-                        timers.remove();
+            int n = JOptionPane.showConfirmDialog(this,
+                    "Sure you want to delete selected plantables?\nTimers associated with it, will also be deleted!",
+                    "Delete?",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (n == 0) {
+                Iterator<Seed> seedsList = seeds.iterator();
+                Iterator<SeedBundle> seedBundlesList = seedBundles.iterator();
+                Iterator<Sapling> saplingsList = saplings.iterator();
+                Iterator<Livestock> livestocksList = livestocks.iterator();
+
+                ArrayList<Timer> timerObjects = timerRegister.getObjects();
+                ArrayList<Timer> timersToDestroy = new ArrayList<>();
+
+                for (Timer t : timerObjects) {
+                    Plantable p = t.getPlantable();
+
+                    if (p instanceof Seed) {
+                        Seed ss = (Seed) p;
+                        for (Seed s : seeds) {
+                            if (s.equals(ss)) {
+                                timersToDestroy.add(t);
+                            }
+                        }
+                    }
+                    if (p instanceof SeedBundle) {
+                        SeedBundle ss = (SeedBundle) p;
+                        for (SeedBundle s : seedBundles) {
+                            if (s.equals(ss)) {
+                                timersToDestroy.add(t);
+                            }
+                        }
+                    }
+                    if (p instanceof Sapling) {
+                        Sapling ss = (Sapling) p;
+                        for (Sapling s : saplings) {
+                            if (s.equals(ss)) {
+                                timersToDestroy.add(t);
+                            }
+                        }
+                    }
+                    if (p instanceof Livestock) {
+                        Livestock ss = (Livestock) p;
+                        for (Livestock s : livestocks) {
+                            if (s.equals(ss)) {
+                                timersToDestroy.add(t);
+                            }
+                        }
                     }
                 }
-                seedRegister.delete(s);
-            }
 
-            while (seedBundles.hasNext()) {
-                SeedBundle s = seedBundles.next();
-                Iterator<Timer> timers = timerRegister.getObjects().iterator();
-                while(timers.hasNext()) {
-                    Timer t = timers.next();
-                    if(t.getPlantable().equals(s)) {
-                        timers.remove();
-                    }
+                Iterator<Timer> i = timersToDestroy.iterator();
+                while (i.hasNext()) {
+                    Timer t = i.next();
+                    timerRegister.delete(t);
                 }
-                seedBundleRegister.delete(s);
-            }
 
-            while (saplings.hasNext()) {
-                Sapling s = saplings.next();
-                Iterator<Timer> timers = timerRegister.getObjects().iterator();
-                while(timers.hasNext()) {
-                    Timer t = timers.next();
-                    if(t.getPlantable().equals(s)) {
-                        timers.remove();
+                while (seedsList.hasNext()) {
+                    Seed s = seedsList.next();
+                    Iterator<Timer> timers = timerRegister.getObjects().iterator();
+                    while (timers.hasNext()) {
+                        Timer t = timers.next();
+                        if (t.getPlantable().equals(s)) {
+                            timers.remove();
+                        }
                     }
+                    seedRegister.delete(s);
                 }
-                saplingRegister.delete(s);
-            }
 
-            while (livestocks.hasNext()) {
-                Livestock s = livestocks.next();
-                Iterator<Timer> timers = timerRegister.getObjects().iterator();
-                while(timers.hasNext()) {
-                    Timer t = timers.next();
-                    if(t.getPlantable().equals(s)) {
-                        timers.remove();
+                while (seedBundlesList.hasNext()) {
+                    SeedBundle s = seedBundlesList.next();
+                    Iterator<Timer> timers = timerRegister.getObjects().iterator();
+                    while (timers.hasNext()) {
+                        Timer t = timers.next();
+                        if (t.getPlantable().equals(s)) {
+                            timers.remove();
+                        }
                     }
+                    seedBundleRegister.delete(s);
                 }
-                livestockRegister.delete(s);
+
+                while (saplingsList.hasNext()) {
+                    Sapling s = saplingsList.next();
+                    Iterator<Timer> timers = timerRegister.getObjects().iterator();
+                    while (timers.hasNext()) {
+                        Timer t = timers.next();
+                        if (t.getPlantable().equals(s)) {
+                            timers.remove();
+                        }
+                    }
+                    saplingRegister.delete(s);
+                }
+
+                while (livestocksList.hasNext()) {
+                    Livestock s = livestocksList.next();
+                    Iterator<Timer> timers = timerRegister.getObjects().iterator();
+                    while (timers.hasNext()) {
+                        Timer t = timers.next();
+                        if (t.getPlantable().equals(s)) {
+                            timers.remove();
+                        }
+                    }
+                    livestockRegister.delete(s);
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_deleteSelectedButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        Iterator<Seed> seeds = seedList.getSelectedValuesList().iterator();
-        Iterator<SeedBundle> seedBundles = seedbundleList.getSelectedValuesList().iterator();
-        Iterator<Sapling> saplings = saplingList.getSelectedValuesList().iterator();
-        Iterator<Livestock> livestocks = livestockList.getSelectedValuesList().iterator();
+        List<Seed> seeds = seedList.getSelectedValuesList();
+        List<SeedBundle> seedBundles = seedbundleList.getSelectedValuesList();
+        List<Sapling> saplings = saplingList.getSelectedValuesList();
+        List<Livestock> livestocks = livestockList.getSelectedValuesList();
 
-        while (seeds.hasNext()) {
-            Seed s = seeds.next();
-            timerRegister.create(s);
+        if (!seeds.isEmpty() || !seedBundles.isEmpty() || !saplings.isEmpty() || !livestocks.isEmpty()) {
+
+            Iterator<Seed> seedsList = seeds.iterator();
+            Iterator<SeedBundle> seedBundlesList = seedBundles.iterator();
+            Iterator<Sapling> saplingsList = saplings.iterator();
+            Iterator<Livestock> livestocksList = livestocks.iterator();
+
+            while (seedsList.hasNext()) {
+                Seed s = seedsList.next();
+                timerRegister.create(s);
+            }
+
+            while (seedBundlesList.hasNext()) {
+                SeedBundle s = seedBundlesList.next();
+                timerRegister.create(s);
+            }
+
+            while (saplingsList.hasNext()) {
+                Sapling s = saplingsList.next();
+                timerRegister.create(s);
+            }
+
+            while (livestocksList.hasNext()) {
+                Livestock s = livestocksList.next();
+                timerRegister.create(s);
+            }
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
         }
-
-        while (seedBundles.hasNext()) {
-            SeedBundle s = seedBundles.next();
-            timerRegister.create(s);
-        }
-
-        while (saplings.hasNext()) {
-            Sapling s = saplings.next();
-            timerRegister.create(s);
-        }
-
-        while (livestocks.hasNext()) {
-            Livestock s = livestocks.next();
-            timerRegister.create(s);
-        }
-
-        dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         clean();
     }//GEN-LAST:event_formWindowClosed
 
+    private void addToFavoritButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToFavoritButtonActionPerformed
+        List<Seed> seeds = seedList.getSelectedValuesList();
+        List<SeedBundle> seedBundles = seedbundleList.getSelectedValuesList();
+        List<Sapling> saplings = saplingList.getSelectedValuesList();
+        List<Livestock> livestocks = livestockList.getSelectedValuesList();
+
+        if (!seeds.isEmpty() || !seedBundles.isEmpty() || !saplings.isEmpty() || !livestocks.isEmpty()) {
+
+            Iterator<Seed> seedsList = seeds.iterator();
+            Iterator<SeedBundle> seedBundlesList = seedBundles.iterator();
+            Iterator<Sapling> saplingsList = saplings.iterator();
+            Iterator<Livestock> livestocksList = livestocks.iterator();
+
+            while (seedsList.hasNext()) {
+                Seed s = seedsList.next();
+                favoritRegister.create(s);
+            }
+
+            while (seedBundlesList.hasNext()) {
+                SeedBundle s = seedBundlesList.next();
+                favoritRegister.create(s);
+            }
+
+            while (saplingsList.hasNext()) {
+                Sapling s = saplingsList.next();
+                favoritRegister.create(s);
+            }
+
+            while (livestocksList.hasNext()) {
+                Livestock s = livestocksList.next();
+                favoritRegister.create(s);
+            }
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addToFavoritButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addToFavoritButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createButton;
     private javax.swing.JButton deleteSelectedButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JList livestockList;
     private javax.swing.JPanel livestockPane;
     private javax.swing.JScrollPane livestockScrollPane;

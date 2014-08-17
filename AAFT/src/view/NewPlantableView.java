@@ -6,6 +6,7 @@
 package view;
 
 import control.ViewController;
+import javax.swing.JOptionPane;
 import model.LivestockRegister;
 import model.SaplingRegister;
 import model.SeedBundleRegister;
@@ -36,7 +37,7 @@ public class NewPlantableView extends javax.swing.JDialog {
         this.livestockRegister = livestockRegister;
     }
 
-    private void create() {
+    private boolean create() {
         String type = (String) typeCB.getSelectedItem();
         String name = nameTF.getText();
         String climate = (String) climateCB.getSelectedItem();
@@ -86,13 +87,22 @@ public class NewPlantableView extends javax.swing.JDialog {
                             livestockRegister.create(name, growthTime, climate);
                             break;
                     }
+                    return true;
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Thats just stupid");
+                JOptionPane.showMessageDialog(this,
+                    "Dont write anything else than numbers in the time fields!",
+                    "Woops!",
+                    JOptionPane.ERROR_MESSAGE);
                 create = false;
             }
+            return false;
         } else {
-            System.out.println("A plantable without a name? Try again...");
+            JOptionPane.showMessageDialog(this,
+                    "Fill out all fields!",
+                    "Woops!",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 
@@ -320,13 +330,15 @@ public class NewPlantableView extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        create();
-        dispose();
+        if(create()) {
+            dispose();
+        }
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void createAndNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAndNextButtonActionPerformed
-        create();
-        clean();
+        if(create()) {
+            clean();
+        }
     }//GEN-LAST:event_createAndNextButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

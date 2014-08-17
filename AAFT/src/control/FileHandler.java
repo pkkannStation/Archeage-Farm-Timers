@@ -26,20 +26,23 @@ public class FileHandler {
     private final SeedRegister seedRegister;
     private final SeedBundleRegister seedBundleRegister;
     private final TimerRegister timerRegister;
+    private final FavoritRegister favoritRegister;
     
     private final String livestock = aaft.AAFT.saveFolder + "//livestocks.ser";
     private final String sapling = aaft.AAFT.saveFolder + "//saplings.ser";
     private final String seed = aaft.AAFT.saveFolder + "//seeds.ser";
     private final String seedBundle = aaft.AAFT.saveFolder + "//seedbundles.ser";
     private final String timer = aaft.AAFT.saveFolder + "//timers.ser";
+    private final String favorit = aaft.AAFT.saveFolder + "//favorits.ser";
     
 
-    public FileHandler(LivestockRegister livestockRegister, SaplingRegister saplingRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, TimerRegister timerRegister) {
+    public FileHandler(LivestockRegister livestockRegister, SaplingRegister saplingRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, TimerRegister timerRegister, FavoritRegister favoritRegister) {
         this.livestockRegister = livestockRegister;
         this.saplingRegister = saplingRegister;
         this.seedRegister = seedRegister;
         this.seedBundleRegister = seedBundleRegister;
         this.timerRegister = timerRegister;
+        this.favoritRegister = favoritRegister;
         new File(aaft.AAFT.saveFolder).mkdir();
     }
 
@@ -105,6 +108,18 @@ public class FileHandler {
             buffer.close();
             file.close();
             
+            // Favorits
+            file = new FileInputStream(favorit);
+            buffer = new BufferedInputStream(file);
+            input = new ObjectInputStream(buffer);
+            
+            ArrayList<Favorit> favorits = (ArrayList<Favorit>) input.readObject();
+            favoritRegister.setObjects(favorits);
+            
+            input.close();
+            buffer.close();
+            file.close();
+            
             System.out.println("Loaded");
         } catch (java.io.FileNotFoundException ex) {
             System.out.println("Nothing to load");
@@ -162,6 +177,17 @@ public class FileHandler {
         output = new ObjectOutputStream(buffer);
         
         output.writeObject(timerRegister.getObjects());
+        
+        output.close();
+        buffer.close();
+        file.close();
+        
+        // Timers
+        file = new FileOutputStream(favorit);
+        buffer = new BufferedOutputStream(file);
+        output = new ObjectOutputStream(buffer);
+        
+        output.writeObject(favoritRegister.getObjects());
         
         output.close();
         buffer.close();

@@ -2,6 +2,7 @@ package control;
 
 import java.util.HashMap;
 import javax.swing.JDialog;
+import model.FavoritRegister;
 import model.LivestockRegister;
 import model.SaplingRegister;
 import model.SeedBundleRegister;
@@ -29,14 +30,16 @@ public class ViewController {
     private SeedBundleRegister seedBundleRegister;
     private SaplingRegister saplingRegister;
     private LivestockRegister livestockRegister;
+    private FavoritRegister favoritRegister;
     private FileHandler fileHandler;
 
-    public ViewController(TimerRegister timerRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, FileHandler fileHandler) {
+    public ViewController(TimerRegister timerRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, FavoritRegister favoritRegister, FileHandler fileHandler) {
         this.timerRegister = timerRegister;
         this.seedRegister = seedRegister;
         this.seedBundleRegister = seedBundleRegister;
         this.saplingRegister = saplingRegister;
         this.livestockRegister = livestockRegister;
+        this.favoritRegister = favoritRegister;
         this.fileHandler = fileHandler;
         viewMap = new HashMap<>();
         initLookAndFeel();
@@ -45,7 +48,7 @@ public class ViewController {
     }
 
     private void initViews() {
-        createTimerView = new CreateTimerView(mainView, true, this, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, timerRegister);
+        createTimerView = new CreateTimerView(mainView, true, this, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, timerRegister, favoritRegister);
         newPlantableView = new NewPlantableView(mainView, true, this, seedRegister, seedBundleRegister, saplingRegister, livestockRegister);
 
         viewMap.put(CREATETIMERVIEW, createTimerView);
@@ -55,7 +58,7 @@ public class ViewController {
     private void constructFrame() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                mainView = new MainView(ViewController.this, timerRegister, fileHandler);
+                mainView = new MainView(ViewController.this, timerRegister, favoritRegister, fileHandler);
             }
         });
         

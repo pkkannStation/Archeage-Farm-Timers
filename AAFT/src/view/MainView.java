@@ -3,14 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import control.FileHandler;
 import control.ViewController;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Favorit;
+import model.FavoritRegister;
+import model.Timer;
 import model.TimerRegister;
 
 /**
@@ -18,23 +24,27 @@ import model.TimerRegister;
  * @author Patrick
  */
 public class MainView extends javax.swing.JFrame {
-    
+
     private final ViewController viewController;
     private TimerRegister timerRegister;
+    private FavoritRegister favoritRegister;
     private FileHandler fileHandler;
 
     /**
      * Creates new form MainView
+     *
      * @param viewController
      * @param timerRegister
      */
-    public MainView(ViewController viewController, TimerRegister timerRegister, FileHandler fileHandler) {
+    public MainView(ViewController viewController, TimerRegister timerRegister, FavoritRegister favoritRegister, FileHandler fileHandler) {
         initComponents();
         this.viewController = viewController;
         this.timerRegister = timerRegister;
+        this.favoritRegister = favoritRegister;
         this.fileHandler = fileHandler;
-        
+
         timersTable.setModel(timerRegister.getTableModel());
+        favoritsList.setModel(favoritRegister.getListModel());
     }
 
     /**
@@ -45,14 +55,14 @@ public class MainView extends javax.swing.JFrame {
     private void initComponents() {
 
         mainPane = new javax.swing.JPanel();
-        toolPane = new javax.swing.JPanel();
-        favoritesList = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        quickAddButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         timersScrollPane = new javax.swing.JScrollPane();
         timersTable = new javax.swing.JTable();
         removeSelectedTimersButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        favoritsList = new javax.swing.JList();
+        createTimersFromFavoritsButton = new javax.swing.JButton();
+        deleteFavoritsButton = new javax.swing.JButton();
         toolBar = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         doShitButton = new javax.swing.JButton();
@@ -72,48 +82,6 @@ public class MainView extends javax.swing.JFrame {
 
         mainPane.setBackground(new java.awt.Color(153, 153, 153));
 
-        toolPane.setBackground(new java.awt.Color(51, 51, 51));
-
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        favoritesList.setViewportView(jList1);
-
-        quickAddButton.setBackground(new java.awt.Color(51, 51, 51));
-        quickAddButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        quickAddButton.setText("Quick add");
-
-        jButton1.setBackground(new java.awt.Color(51, 51, 51));
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Remove selected");
-
-        javax.swing.GroupLayout toolPaneLayout = new javax.swing.GroupLayout(toolPane);
-        toolPane.setLayout(toolPaneLayout);
-        toolPaneLayout.setHorizontalGroup(
-            toolPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(toolPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(toolPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(favoritesList)
-                    .addComponent(quickAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        toolPaneLayout.setVerticalGroup(
-            toolPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(toolPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(favoritesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(quickAddButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         timersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -132,6 +100,54 @@ public class MainView extends javax.swing.JFrame {
         removeSelectedTimersButton.setFocusable(false);
         removeSelectedTimersButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         removeSelectedTimersButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        removeSelectedTimersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeSelectedTimersButtonActionPerformed(evt);
+            }
+        });
+
+        favoritsList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        favoritsList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(favoritsList);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        createTimersFromFavoritsButton.setBackground(new java.awt.Color(153, 153, 153));
+        createTimersFromFavoritsButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        createTimersFromFavoritsButton.setText("Create timers from selected favorits");
+        createTimersFromFavoritsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createTimersFromFavoritsButtonActionPerformed(evt);
+            }
+        });
+
+        deleteFavoritsButton.setBackground(new java.awt.Color(153, 153, 153));
+        deleteFavoritsButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        deleteFavoritsButton.setText("Delete selected favorits");
+        deleteFavoritsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteFavoritsButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout mainPaneLayout = new javax.swing.GroupLayout(mainPane);
         mainPane.setLayout(mainPaneLayout);
@@ -140,22 +156,30 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(timersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
                     .addGroup(mainPaneLayout.createSequentialGroup()
                         .addComponent(removeSelectedTimersButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(createTimersFromFavoritsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteFavoritsButton)
+                        .addGap(0, 15, Short.MAX_VALUE))
+                    .addComponent(timersScrollPane))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         mainPaneLayout.setVerticalGroup(
             mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(removeSelectedTimersButton)
+                .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(removeSelectedTimersButton)
+                    .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(createTimersFromFavoritsButton)
+                        .addComponent(deleteFavoritsButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(timersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -200,7 +224,7 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_doShitButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        
+
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -211,18 +235,83 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
+    private void removeSelectedTimersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSelectedTimersButtonActionPerformed
+        int[] selected = timersTable.getSelectedRows();
+        if (selected.length != 0) {
+            int n = JOptionPane.showConfirmDialog(this,
+                    "Sure you want to delete selected timers?",
+                    "Delete?",
+                    JOptionPane.YES_NO_OPTION);
+            if (n == 0) {
+
+                //System.out.println(selected.length);
+                ArrayList<Timer> timers = new ArrayList<>();
+
+                for (int i : selected) {
+                    Timer t = timerRegister.get(i);
+                    timers.add(t);
+                }
+
+                for (Timer t : timers) {
+                    timerRegister.delete(t);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_removeSelectedTimersButtonActionPerformed
+
+    private void createTimersFromFavoritsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTimersFromFavoritsButtonActionPerformed
+        List<Favorit> favorits = favoritsList.getSelectedValuesList();
+
+        if (!favorits.isEmpty()) {
+            Iterator<Favorit> i = favorits.iterator();
+
+            while (i.hasNext()) {
+                Favorit f = i.next();
+                timerRegister.create(f.getPlantable());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_createTimersFromFavoritsButtonActionPerformed
+
+    private void deleteFavoritsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFavoritsButtonActionPerformed
+        List<Favorit> favorits = favoritsList.getSelectedValuesList();
+
+        if (!favorits.isEmpty()) {
+            Iterator<Favorit> i = favorits.iterator();
+
+            while (i.hasNext()) {
+                Favorit f = i.next();
+                favoritRegister.delete(f);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Please choose something!",
+                    "Choose!",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteFavoritsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton createTimersFromFavoritsButton;
+    private javax.swing.JButton deleteFavoritsButton;
     private javax.swing.JButton doShitButton;
-    private javax.swing.JScrollPane favoritesList;
+    private javax.swing.JList favoritsList;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JList jList1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPane;
-    private javax.swing.JButton quickAddButton;
     private javax.swing.JButton removeSelectedTimersButton;
     private javax.swing.JScrollPane timersScrollPane;
     private javax.swing.JTable timersTable;
     private javax.swing.JToolBar toolBar;
-    private javax.swing.JPanel toolPane;
     // End of variables declaration//GEN-END:variables
 }

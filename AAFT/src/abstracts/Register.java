@@ -1,7 +1,6 @@
 package abstracts;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.swing.DefaultListModel;
 
 /**
@@ -13,29 +12,135 @@ public abstract class Register<DATATYPE> {
 
     private ArrayList<DATATYPE> objects;
     private DefaultListModel dlm;
+    private JellyTableModel<DATATYPE> jtm;
 
     public Register() {
         objects = new ArrayList<>();
     }
 
     /**
-     * Adds an object to the model
+     * Adds an object to the table model
      *
-     * @param l
+     * @param object
      */
-    public void addToModel(DATATYPE l) {
-        makeListModel();
-        dlm.addElement(l);
-    }
-    
-    public void removeFromModel(DATATYPE l) {
-        if(dlm != null) {
-            dlm.removeElement(l);
+    public void addToTableModel(DATATYPE object) {
+        if (jtm != null) {
+            jtm.addRow(object);
+        } else {
+            makeTableModel();
+            jtm.addRow(object);
         }
     }
 
     /**
-     * Returns a list model with all objects
+     * Removes an object from the table model
+     *
+     * @param index
+     */
+    public void removeFromTableModel(int index) {
+        if (jtm != null) {
+            jtm.removeRow(index);
+        }
+    }
+
+    /**
+     * Removes an object from the table model
+     *
+     * @param object
+     */
+    public void removeFromTableModel(DATATYPE object) {
+        if (jtm != null) {
+            jtm.removeRow(object);
+        }
+    }
+
+    /**
+     * Updates an object in the table model
+     *
+     * @param target
+     * @param source
+     */
+    public void updateInTableModel(DATATYPE target, DATATYPE source) {
+        if (jtm != null) {
+            jtm.updateRow(target, source);
+        }
+    }
+
+    /**
+     * Returns the table model
+     *
+     * @return JellyTableModel<DATATYPE>
+     */
+    public JellyTableModel<DATATYPE> getTableModel() {
+        if (jtm != null) {
+            return jtm;
+        } else {
+            makeTableModel();
+            return jtm;
+        }
+    }
+
+    /**
+     * Makes the table model
+     */
+    public void makeTableModel() {
+        this.jtm = constructTableModel();
+    }
+
+    /**
+     * Constructs the table model
+     *
+     * @return JellyTableModel<DATATYPE>
+     */
+    public abstract JellyTableModel<DATATYPE> constructTableModel();
+
+    /**
+     * Adds an object to the list model
+     *
+     * @param object
+     */
+    public void addToListModel(DATATYPE object) {
+        makeListModel();
+        dlm.addElement(object);
+    }
+
+    /**
+     * Removes an object from the list model
+     *
+     * @param object
+     */
+    public void removeFromListModel(DATATYPE object) {
+        if (dlm != null) {
+            dlm.removeElement(object);
+        }
+    }
+
+    /**
+     * Update an object in the list model
+     *
+     * @param target
+     * @param source
+     */
+    public void updateInListModel(DATATYPE target, DATATYPE source) {
+        if (dlm != null) {
+            int index = this.getObjects().indexOf(target);
+            dlm.setElementAt(target, index);
+        }
+    }
+
+    /**
+     * Removes an object from the list model
+     *
+     * @param index
+     */
+    public void removeFromListModel(int index) {
+        if (dlm != null) {
+            dlm.removeElementAt(index);
+        }
+    }
+
+    /**
+     * Returns the list model
      *
      * @return DefaultListModel
      */
@@ -50,8 +155,8 @@ public abstract class Register<DATATYPE> {
     private void makeListModel() {
         if (dlm == null) {
             dlm = new DefaultListModel();
-            
-            for(DATATYPE l : objects) {
+
+            for (DATATYPE l : objects) {
                 dlm.addElement(l);
             }
         }
@@ -64,7 +169,8 @@ public abstract class Register<DATATYPE> {
      */
     public void insert(DATATYPE source) {
         objects.add(source);
-        addToModel(source);
+        addToListModel(source);
+        addToTableModel(source);
     }
 
     /**
@@ -75,16 +181,30 @@ public abstract class Register<DATATYPE> {
      */
     public void update(DATATYPE source, DATATYPE target) {
         objects.set(objects.indexOf(target), source);
+        updateInListModel(target, source);
+        updateInTableModel(target, source);
     }
 
     /**
      * Deletes a target
      *
-     * @param target
+     * @param index
      */
-    public void delete(DATATYPE target) {
-        objects.remove(target);
-        removeFromModel(target);
+    public void delete(int index) {
+        removeFromListModel(index);
+        removeFromTableModel(index);
+        objects.remove(index);
+    }
+
+    /**
+     * Deletes a target
+     *
+     * @param object
+     */
+    public void delete(DATATYPE object) {
+        removeFromListModel(object);
+        removeFromTableModel(object);
+        objects.remove(object);
     }
 
     /**

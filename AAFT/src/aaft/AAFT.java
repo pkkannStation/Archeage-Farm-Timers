@@ -24,6 +24,7 @@ public class AAFT {
     private final SeedRegister seedRegister;
     private final SeedBundleRegister seedBundleRegister;
     private final TimerRegister timerRegister;
+    private final FavoritRegister favoritRegister;
     
     private final FileHandler fileHandler;
     private final ViewController viewController;
@@ -36,10 +37,17 @@ public class AAFT {
         seedRegister = new SeedRegister();
         seedBundleRegister = new SeedBundleRegister();
         timerRegister = new TimerRegister();
+        favoritRegister = new FavoritRegister();
         
-        fileHandler = new FileHandler(livestockRegister, saplingRegister, seedRegister, seedBundleRegister, timerRegister);
+        fileHandler = new FileHandler(livestockRegister, saplingRegister, seedRegister, seedBundleRegister, timerRegister, favoritRegister);
         fileHandler.load();
-        viewController = new ViewController(timerRegister, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, fileHandler);
+        livestockRegister.makeTableModel();
+        saplingRegister.makeTableModel();
+        seedRegister.makeTableModel();
+        seedBundleRegister.makeTableModel();
+        timerRegister.makeTableModel();
+        favoritRegister.makeTableModel();
+        viewController = new ViewController(timerRegister, seedRegister, seedBundleRegister, saplingRegister, livestockRegister, favoritRegister, fileHandler);
     }
     
     private void makeIcon() throws IOException {
