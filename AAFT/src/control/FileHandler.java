@@ -26,7 +26,7 @@ public class FileHandler {
     private final SeedRegister seedRegister;
     private final SeedBundleRegister seedBundleRegister;
     private final TimerRegister timerRegister;
-    private final FavoritRegister favoritRegister;
+    private final FavoriteRegister favoritRegister;
     
     private final String livestock = aaft.AAFT.saveFolder + "//livestocks.ser";
     private final String sapling = aaft.AAFT.saveFolder + "//saplings.ser";
@@ -36,7 +36,7 @@ public class FileHandler {
     private final String favorit = aaft.AAFT.saveFolder + "//favorits.ser";
     
 
-    public FileHandler(LivestockRegister livestockRegister, SaplingRegister saplingRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, TimerRegister timerRegister, FavoritRegister favoritRegister) {
+    public FileHandler(LivestockRegister livestockRegister, SaplingRegister saplingRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, TimerRegister timerRegister, FavoriteRegister favoritRegister) {
         this.livestockRegister = livestockRegister;
         this.saplingRegister = saplingRegister;
         this.seedRegister = seedRegister;
@@ -113,7 +113,7 @@ public class FileHandler {
             buffer = new BufferedInputStream(file);
             input = new ObjectInputStream(buffer);
             
-            ArrayList<Favorit> favorits = (ArrayList<Favorit>) input.readObject();
+            ArrayList<Favorite> favorits = (ArrayList<Favorite>) input.readObject();
             favoritRegister.setObjects(favorits);
             
             input.close();

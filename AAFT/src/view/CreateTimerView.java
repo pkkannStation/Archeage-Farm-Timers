@@ -25,12 +25,12 @@ public class CreateTimerView extends javax.swing.JDialog {
     private SaplingRegister saplingRegister;
     private LivestockRegister livestockRegister;
     private TimerRegister timerRegister;
-    private FavoritRegister favoritRegister;
+    private FavoriteRegister favoritRegister;
 
     /**
      * Creates new form CreateTimerView
      */
-    public CreateTimerView(java.awt.Frame parent, boolean modal, ViewController viewController, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, TimerRegister timerRegister, FavoritRegister favoritRegister) {
+    public CreateTimerView(java.awt.Frame parent, boolean modal, ViewController viewController, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, TimerRegister timerRegister, FavoriteRegister favoritRegister) {
         super(parent, modal);
         initComponents();
         this.viewController = viewController;
@@ -445,22 +445,58 @@ public class CreateTimerView extends javax.swing.JDialog {
 
             while (seedsList.hasNext()) {
                 Seed s = seedsList.next();
-                timerRegister.create(s);
+                boolean inClimate = false;
+                int n = JOptionPane.showConfirmDialog(
+                        this,
+                        "Is " + s.getName() + ", planted in the right climate?",
+                        "Climate?",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    inClimate = true;
+                }
+                timerRegister.create(s, inClimate);
             }
 
             while (seedBundlesList.hasNext()) {
                 SeedBundle s = seedBundlesList.next();
-                timerRegister.create(s);
+                boolean inClimate = false;
+                int n = JOptionPane.showConfirmDialog(
+                        this,
+                        "Is " + s.getName() + ", planted in the right climate?",
+                        "Climate?",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    inClimate = true;
+                }
+                timerRegister.create(s, inClimate);
             }
 
             while (saplingsList.hasNext()) {
                 Sapling s = saplingsList.next();
-                timerRegister.create(s);
+                boolean inClimate = false;
+                int n = JOptionPane.showConfirmDialog(
+                        this,
+                        "Is " + s.getName() + ", planted in the right climate?",
+                        "Climate?",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    inClimate = true;
+                }
+                timerRegister.create(s, inClimate);
             }
 
             while (livestocksList.hasNext()) {
                 Livestock s = livestocksList.next();
-                timerRegister.create(s);
+                boolean inClimate = false;
+                int n = JOptionPane.showConfirmDialog(
+                        this,
+                        "Is " + s.getName() + ", planted in the right climate?",
+                        "Climate?",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    inClimate = true;
+                }
+                timerRegister.create(s, inClimate);
             }
             dispose();
         } else {

@@ -1,14 +1,11 @@
 package aaft;
 
-import abstracts.Plantable;
 import control.AutomaticTableUpdater;
 import control.FileHandler;
 import control.ViewController;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import model.*;
 
@@ -28,7 +25,7 @@ public class AAFT {
     private final SeedRegister seedRegister;
     private final SeedBundleRegister seedBundleRegister;
     private final TimerRegister timerRegister;
-    private final FavoritRegister favoritRegister;
+    private final FavoriteRegister favoritRegister;
     
     private final FileHandler fileHandler;
     private final ViewController viewController;
@@ -43,7 +40,7 @@ public class AAFT {
         seedRegister = new SeedRegister();
         seedBundleRegister = new SeedBundleRegister();
         timerRegister = new TimerRegister();
-        favoritRegister = new FavoritRegister();
+        favoritRegister = new FavoriteRegister();
         
         fileHandler = new FileHandler(livestockRegister, saplingRegister, seedRegister, seedBundleRegister, timerRegister, favoritRegister);
         fileHandler.load();

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import model.FavoritRegister;
+import model.FavoriteRegister;
 import model.LivestockRegister;
 import model.SaplingRegister;
 import model.SeedBundleRegister;
@@ -34,10 +34,10 @@ public class ViewController {
     private SeedBundleRegister seedBundleRegister;
     private SaplingRegister saplingRegister;
     private LivestockRegister livestockRegister;
-    private FavoritRegister favoritRegister;
+    private FavoriteRegister favoritRegister;
     private FileHandler fileHandler;
 
-    public ViewController(TimerRegister timerRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, FavoritRegister favoritRegister, FileHandler fileHandler) {
+    public ViewController(TimerRegister timerRegister, SeedRegister seedRegister, SeedBundleRegister seedBundleRegister, SaplingRegister saplingRegister, LivestockRegister livestockRegister, FavoriteRegister favoritRegister, FileHandler fileHandler) {
         this.timerRegister = timerRegister;
         this.seedRegister = seedRegister;
         this.seedBundleRegister = seedBundleRegister;

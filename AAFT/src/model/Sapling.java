@@ -11,7 +11,7 @@ public class Sapling extends Plantable {
 
     public Sapling(String name, long growthTime, String climate) {
         super(name, growthTime, climate);
-        setClimateBonus(0.8f);
+        setClimateBonus(7);
     }
 
 }

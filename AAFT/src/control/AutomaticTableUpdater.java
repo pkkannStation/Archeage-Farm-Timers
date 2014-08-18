@@ -37,7 +37,6 @@ public class AutomaticTableUpdater implements Runnable {
     @Override
     public void run() {
         while(running) {
-            System.out.println("RUNNING");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {

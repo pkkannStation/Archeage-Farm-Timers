@@ -11,7 +11,7 @@ public abstract class Plantable implements Serializable {
     private String name;
     private long growthTime;
     private String climate;
-    private float climateBonus;
+    private long climateBonus;
     private boolean inClimate;
 
     public Plantable(String name, long growthTime, String climate) {
@@ -44,11 +44,11 @@ public abstract class Plantable implements Serializable {
         this.climate = climate;
     }
 
-    public float getClimateBonus() {
+    public long getClimateBonus() {
         return climateBonus;
     }
 
-    public void setClimateBonus(float climateBonus) {
+    public void setClimateBonus(long climateBonus) {
         this.climateBonus = climateBonus;
     }
 

@@ -4,7 +4,6 @@ import abstracts.JellyTableModel;
 import abstracts.Plantable;
 import abstracts.Register;
 import java.util.Date;
-import javax.swing.JButton;
 
 /**
  *
@@ -13,7 +12,13 @@ import javax.swing.JButton;
 public class TimerRegister extends Register<Timer> {
     
     public String getRemainingTime(Timer timer) {
+        
         Long growthTime = timer.getPlantable().getGrowthTime();
+        
+        if(!timer.getPlantable().getClimate().equals("None") && timer.isInClimate()) {
+            growthTime = growthTime * timer.getPlantable().getClimateBonus() / 10;
+        }
+        
         Long plantTime = timer.getPlantTime().getTime();
         
         Long currentTime = new Date().getTime();
@@ -23,7 +28,6 @@ public class TimerRegister extends Register<Timer> {
         if(calculation < growthTime) {
             //Still growing
             Long remainingTime = growthTime - calculation;
-            System.out.println("Remaining: " + remainingTime);
             
             Long daysL = remainingTime / 1000 / 60 / 60 / 24;
             int days = Integer.valueOf(daysL.intValue());
@@ -56,8 +60,8 @@ public class TimerRegister extends Register<Timer> {
         return null;
     }
 
-    public void create(Plantable plantable) {
-        Timer t = new Timer(plantable);
+    public void create(Plantable plantable, boolean inClimate) {
+        Timer t = new Timer(plantable, inClimate);
         insert(t);
     }
 

@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Favorit;
-import model.FavoritRegister;
+import model.Favorite;
+import model.FavoriteRegister;
 import model.Timer;
 import model.TimerRegister;
 
@@ -27,7 +27,7 @@ public class MainView extends javax.swing.JFrame {
 
     private final ViewController viewController;
     private TimerRegister timerRegister;
-    private FavoritRegister favoritRegister;
+    private FavoriteRegister favoritRegister;
     private FileHandler fileHandler;
 
     /**
@@ -36,7 +36,7 @@ public class MainView extends javax.swing.JFrame {
      * @param viewController
      * @param timerRegister
      */
-    public MainView(ViewController viewController, TimerRegister timerRegister, FavoritRegister favoritRegister, FileHandler fileHandler) {
+    public MainView(ViewController viewController, TimerRegister timerRegister, FavoriteRegister favoritRegister, FileHandler fileHandler) {
         initComponents();
         this.viewController = viewController;
         this.timerRegister = timerRegister;
@@ -109,7 +109,7 @@ public class MainView extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Favorits");
+        jLabel1.setText("Favorites");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -259,14 +259,23 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void createTimersFromFavoritsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTimersFromFavoritsButtonActionPerformed
-        List<Favorit> favorits = favoritsList.getSelectedValuesList();
+        List<Favorite> favorits = favoritsList.getSelectedValuesList();
 
         if (!favorits.isEmpty()) {
-            Iterator<Favorit> i = favorits.iterator();
+            Iterator<Favorite> i = favorits.iterator();
 
             while (i.hasNext()) {
-                Favorit f = i.next();
-                timerRegister.create(f.getPlantable());
+                Favorite f = i.next();
+                boolean inClimate = false;
+                int n = JOptionPane.showConfirmDialog(
+                        this,
+                        "Is " + f.getPlantable().getName() + ", planted in the right climate?",
+                        "Climate?",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    inClimate = true;
+                }
+                timerRegister.create(f.getPlantable(), inClimate);
             }
         } else {
             JOptionPane.showMessageDialog(this,
@@ -277,13 +286,13 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_createTimersFromFavoritsButtonActionPerformed
 
     private void deleteFavoritsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFavoritsButtonActionPerformed
-        List<Favorit> favorits = favoritsList.getSelectedValuesList();
+        List<Favorite> favorits = favoritsList.getSelectedValuesList();
 
         if (!favorits.isEmpty()) {
-            Iterator<Favorit> i = favorits.iterator();
+            Iterator<Favorite> i = favorits.iterator();
 
             while (i.hasNext()) {
-                Favorit f = i.next();
+                Favorite f = i.next();
                 favoritRegister.delete(f);
             }
         } else {

@@ -91,9 +91,9 @@ public class NewPlantableView extends javax.swing.JDialog {
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this,
-                    "Dont write anything else than numbers in the time fields!",
-                    "Woops!",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Dont write anything else than numbers in the time fields!",
+                        "Woops!",
+                        JOptionPane.ERROR_MESSAGE);
                 create = false;
             }
             return false;
@@ -330,13 +330,13 @@ public class NewPlantableView extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        if(create()) {
+        if (create()) {
             dispose();
         }
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void createAndNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAndNextButtonActionPerformed
-        if(create()) {
+        if (create()) {
             clean();
         }
     }//GEN-LAST:event_createAndNextButtonActionPerformed
